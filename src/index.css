@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* --- Star Rating Styles --- */
+/* Hide the actual radio button */
+input[type="radio"].hidden {
+  display: none;
+}
+
+/* When a radio button is checked, 
+  make all stars *before* it (~) and itself (+) yellow.
+  Because we used flex-direction: row-reverse, "before"
+  in the code is actually "after" on the screen.
+*/
+input[type="radio"]:checked ~ .star-label,
+input[type="radio"]:checked + .star-label {
+  color: #facc15; /* This is Tailwind's yellow-400 */
+}
+
+/* When you hover over a star,
+  make all stars *before* it (~) and itself (+) yellow.
+*/
+input[type="radio"]:hover ~ .star-label,
+input[type="radio"]:hover + .star-label {
+  color: #facc15;
+}
