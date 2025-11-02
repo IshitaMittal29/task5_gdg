@@ -13,11 +13,8 @@ function NavBar() {
           <Link to="/feedback">FEEDBACK</Link>
         </div>
         
-        {/* These two buttons make sense for a logged-out user */}
-        <div className="flex items-center gap-4">
-          <Link to="/login" className="font-medium text-white hover:text-gray-200">
-            LOGIN
-          </Link>
+        {/* Only the "JOIN NOW" button remains */}
+        <div className="flex items-center">
           <Link to="/signup" className="btn btn-nav-outline">
             JOIN NOW
           </Link>

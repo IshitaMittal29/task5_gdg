@@ -6,8 +6,11 @@ function Hero() {
       <div className="container hero-container">
         <div className="hero-content">
           <h1>
-            Learn Smarter, Teach Better — Powered by AI.
+            NEXUSLEARN 
           </h1>
+          <h2>
+            Learn Smarter, Teach Better — Powered by AI.
+          </h2>
           <p>
             An AI-driven e-learning platform for students, creators, and admins — all in one place
           </p>
