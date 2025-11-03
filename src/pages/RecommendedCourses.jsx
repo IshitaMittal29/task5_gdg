@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// Placeholder data for recommended courses
 const recommendations = [
   {
     id: 1,

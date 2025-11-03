@@ -8,10 +8,7 @@ function LoginPage() {
     e.preventDefault(); 
     const email = e.target.email.value;
 
-    // --- DEBUGGING LINE ---
-    // This will print the exact email value to your browser's console
     console.log("Email value being checked:", email);
-    // ----------------------
 
     if (email.includes('creator')) {
       alert("Creator login successful! Redirecting to Creator Dashboard...");

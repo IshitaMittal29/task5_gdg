@@ -13,15 +13,12 @@ import UpcomingEvents from './UpcomingEvents.jsx';
 function DashboardPage() {
   return (
     <div className="flex min-h-screen font-inter bg-gray-100">
-      {/* 1. The Blue Sidebar */}
       <Sidebar />
 
-      {/* 2. The Main Content Area (everything else) */}
       <main className="flex-1 p-8">
         <PageTitleBar />
         <DashboardHeader />
 
-        {/* 3. The Grid of Cards */}
         <div className="grid grid-cols-3 gap-6">
           <WelcomeCard />
           <Calendar />

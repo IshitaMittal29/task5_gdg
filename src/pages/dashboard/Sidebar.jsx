@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
-  const location = useLocation(); // Get current page path
+  const location = useLocation(); 
   const currentPath = location.pathname;
 
   const navLinks = [
@@ -26,7 +26,6 @@ const Sidebar = () => {
         <ul className="space-y-3">
           {navLinks.map((link) => (
             <li key={link.name}>
-              {/* Change <a> to <Link> */}
               <Link 
                 to={link.path} 
                 className={`flex items-center space-x-3 p-3 rounded-lg transition-all ${
@@ -44,9 +43,8 @@ const Sidebar = () => {
       </nav>
 
       <div>
-        {/* Also change this to a Link */}
         <Link 
-          to="/profile" // Or a dedicated /settings page
+          to="/profile" 
           className="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-700 transition-all"
         >
           <i className="fa-solid fa-gear"></i>

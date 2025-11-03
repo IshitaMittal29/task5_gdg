@@ -1,6 +1,5 @@
 import React from 'react';
 
-// Helper component for the bar chart
 const Bar = ({ h }) => <div className={`w-full ${h} bg-blue-500 rounded-t-lg`}></div>;
 
 const Performance = () => {

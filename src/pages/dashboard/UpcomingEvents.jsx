@@ -1,6 +1,5 @@
 import React from 'react';
 
-// Helper component
 const EventItem = ({ title, img }) => (
   <div className="flex items-center space-x-3">
     <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-600">

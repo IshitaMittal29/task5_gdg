@@ -6,16 +6,14 @@ function PaymentPage() {
 
   const handlePayment = (e) => {
     e.preventDefault();
-    // In a real app, you would send this to Stripe, etc.
     alert("Payment successful! (Not really, this is a demo)");
-    navigate('/dashboard'); // Redirect to dashboard after 'payment'
+    navigate('/dashboard'); 
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 font-inter">
       <div className="w-full max-w-4xl p-8 mx-4 bg-white rounded-lg shadow-lg md:flex md:space-x-12">
         
-        {/* Left Side: Billing Details */}
         <div className="w-full md:w-1/2">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">
             Billing Details

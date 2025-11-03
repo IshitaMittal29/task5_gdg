@@ -20,11 +20,8 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       
-      {/* Student Dashboard */}
       <Route path="/dashboard" element={<DashboardPage />} /> 
-      
-      {/* Creator Dashboard */}
-      <Route path="/creator-dashboard" element={<CreatorDashboardPage />} /> {/* 2. Add route */}
+      <Route path="/creator-dashboard" element={<CreatorDashboardPage />} /> 
 
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />

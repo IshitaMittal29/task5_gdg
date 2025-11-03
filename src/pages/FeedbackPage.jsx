@@ -22,24 +22,18 @@ function FeedbackPage() {
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           
-          {/* --- 5-Star Rating Component --- */}
           <div>
             <label className="block text-lg font-medium text-center text-gray-700 mb-2">
               Your Rating
             </label>
-            {/* This is a CSS-based star rating system.
-              We style radio inputs (which are hidden)
-              and their <label> tags (which are the stars).
-            */}
+            
             <div 
               className="flex justify-center items-center space-x-1" 
               style={{
-                // We reverse the direction so :hover works correctly
                 flexDirection: 'row-reverse', 
                 textAlign: 'left',
               }}
             >
-              {/* Each star is a label for a hidden radio button */}
               <input type="radio" id="star5" name="rating" value="5" className="hidden" />
               <label htmlFor="star5" className="star-label text-4xl text-gray-300 cursor-pointer hover:text-yellow-400 peer-hover:text-yellow-400">★</label>
               
@@ -55,10 +49,8 @@ function FeedbackPage() {
               <input type="radio" id="star1" name="rating" value="1" className="hidden" />
               <label htmlFor="star1" className="star-label text-4xl text-gray-300 cursor-pointer hover:text-yellow-400 peer-hover:text-yellow-400">★</label>
 
-              {/* This CSS is a bit complex, so we'll add it to index.css */}
             </div>
           </div>
-          {/* --- End of 5-Star Rating --- */}
 
           <div>
             <label 

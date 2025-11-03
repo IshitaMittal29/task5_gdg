@@ -1,6 +1,5 @@
 import React from 'react';
 
-// This is a helper component, defined in the same file
 const CalendarItem = ({ time, title, lesson, color }) => {
   const colors = {
     blue: 'border-l-blue-500 bg-blue-50',
@@ -17,7 +16,6 @@ const CalendarItem = ({ time, title, lesson, color }) => {
   );
 };
 
-// This is the main card component
 const Calendar = () => {
   return (
     <div className="col-span-1 row-span-2 bg-white p-6 rounded-xl shadow-sm">

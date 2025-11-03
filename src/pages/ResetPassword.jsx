@@ -6,10 +6,9 @@ function ResetPassword() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // In a real app, you'd verify the OTP and the new passwords match
     console.log("Password has been reset!");
     alert("Password reset successfully!");
-    navigate('/login'); // Send user back to login page
+    navigate('/login');
   };
 
   return (

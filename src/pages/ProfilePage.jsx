@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-// Placeholder user data
 const user = {
   name: 'Alex Johnson',
   email: 'alex.johnson@example.com',
@@ -15,7 +14,7 @@ function ProfilePage() {
 
   const handleLogout = () => {
     alert("You have been logged out.");
-    navigate('/'); // Redirect to landing page after logout
+    navigate('/'); 
   };
 
   return (

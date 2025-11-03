@@ -1,9 +1,7 @@
 import React from 'react';
 
-// Helper component for the stats
 const StatCircle = ({ percent, label }) => (
   <div className="text-center">
-    {/* This is a simplified stand-in for a donut chart */}
     <div className="p-4 rounded-full flex items-center justify-center">
       <span className="text-3xl font-bold text-blue-600">{percent}</span>
     </div>

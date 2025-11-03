@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function SignupPage() {
-  // State to manage which role is selected
-  const [role, setRole] = useState('student'); // 'student' or 'creator'
+  const [role, setRole] = useState('student'); 
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 font-inter">
@@ -14,7 +13,6 @@ function SignupPage() {
         
         <form className="space-y-6">
           
-          {/* --- NEW: Role Selection --- */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Register as
@@ -44,7 +42,6 @@ function SignupPage() {
               </button>
             </div>
           </div>
-          {/* --- End of Role Selection --- */}
 
           <div>
             <label 
@@ -89,7 +86,6 @@ function SignupPage() {
             </div>
           </div>
 
-          {/* --- NEW: OTP Verification --- */}
           <div>
             <label 
               htmlFor="otp" 

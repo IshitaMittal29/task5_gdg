@@ -18,7 +18,7 @@ function Courses() {
         
         <div className="courses-grid">
           <div className="course-card">
-            <img src="https://placehold.co/600x400/065f46/ffffff?text=Python+Course" alt="Python Course" className="course-card-image" onError={(e) => { e.target.src = 'https://placehold.co/600x400/cccccc/333333?text=Image+Error'; }} />
+            <img src="https://i.ytimg.com/vi/gox0q--CoUs/maxresdefault.jpg" alt="Python Course" className="course-card-image" onError={(e) => { e.target.src = 'https://placehold.co/600x400/cccccc/333333?text=Image+Error'; }} />
             <div className="course-card-content">
               <span className="course-card-tag">PYTHON</span>
               <h3>Python course</h3>
@@ -30,7 +30,7 @@ function Courses() {
             </div>
           </div>
           <div className="course-card">
-            <img src="https://placehold.co/600x400/4338ca/ffffff?text=Graphics+Design" alt="Graphics Design" className="course-card-image" onError={(e) => { e.target.src = 'https://placehold.co/600x400/cccccc/333333?text=Image+Error'; }} />
+            <img src="https://www.unite.ai/wp-content/uploads/2023/05/AI-Graphic-design-tools.png" alt="Graphics Design" className="course-card-image" onError={(e) => { e.target.src = 'https://placehold.co/600x400/cccccc/333333?text=Image+Error'; }} />
             <div className="course-card-content">
               <span className="course-card-tag">DESIGN</span>
               <h3>Graphics Designing</h3>
@@ -42,7 +42,7 @@ function Courses() {
             </div>
           </div>
           <div className="course-card">
-            <img src="https://placehold.co/600x400/b91c1c/ffffff?text=Video+Editing" alt="Video Editing" className="course-card-image" onError={(e) => { e.target.src = 'https://placehold.co/600x400/cccccc/333333?text=Image+Error'; }} />
+            <img src="https://wallpaperaccess.com/full/3840984.jpg" alt="Video Editing" className="course-card-image" onError={(e) => { e.target.src = 'https://placehold.co/600x400/cccccc/333333?text=Image+Error'; }} />
             <div className="course-card-content">
               <span className="course-card-tag">MEDIA</span>
               <h3>Video Editing</h3>
