@@ -12,6 +12,7 @@ import PaymentPage from './pages/PaymentPage.jsx';
 import FeedbackPage from './pages/FeedbackPage.jsx'; 
 import ProfilePage from './pages/ProfilePage.jsx'; 
 import RecommendedCourses from './pages/RecommendedCourses.jsx'; 
+import PlagiarismDetector from './pages/PlagiarismDetector.jsx';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
       <Route path="/payment" element={<PaymentPage />} />
       <Route path="/feedback" element={<FeedbackPage />} />
       <Route path="/recommendations" element={<RecommendedCourses />} />
+      <Route path="/plagiarism" element={<PlagiarismDetector />} />
     </Routes>
   );
 }

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react'; // 1. Import useState
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'; // 2. Import axios
 
+// Placeholder user data
 const user = {
   name: 'Alex Johnson',
   email: 'alex.johnson@example.com',
@@ -11,10 +13,41 @@ const user = {
 
 function ProfilePage() {
   const navigate = useNavigate();
+  // 3. Add loading state for the logout button
+  const [loading, setLoading] = useState(false);
 
-  const handleLogout = () => {
-    alert("You have been logged out.");
-    navigate('/'); 
+  const handleLogout = async () => {
+    setLoading(true);
+    
+    // 4. Get the token from local storage
+    const token = localStorage.getItem('token');
+
+    try {
+      // 5. Call the logout API
+      // Note: Your API might require the token as a Bearer token in headers.
+      // This example sends it in the body, adjust as needed.
+      await axios.post('/api/auth/logout', {
+        accessToken: token, // Check if your API needs 'accessToken' or just 'token'
+      });
+
+      // 6. Clear user data from storage on success
+      localStorage.removeItem('token');
+      localStorage.removeItem('user'); // Also remove the user object if you saved one
+      
+      setLoading(false);
+      alert("You have been logged out.");
+      navigate('/'); // Redirect to landing page
+
+    } catch (err) {
+      console.error("Logout failed:", err);
+      setLoading(false);
+      
+      // Even if the API fails (e.g., token expired), force logout
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      alert("Logout failed, but you have been logged out locally.");
+      navigate('/');
+    }
   };
 
   return (
@@ -72,9 +105,10 @@ function ProfilePage() {
           <div className="pt-6 border-t">
             <button 
               onClick={handleLogout}
-              className="w-full max-w-xs px-4 py-2 font-medium text-white bg-red-600 rounded-md shadow-sm hover:bg-red-700 focus:outline-none"
+              disabled={loading} // 7. Disable button while loading
+              className="w-full max-w-xs px-4 py-2 font-medium text-white bg-red-600 rounded-md shadow-sm hover:bg-red-700 focus:outline-none disabled:bg-gray-400"
             >
-              Log Out
+              {loading ? 'Logging out...' : 'Log Out'}
             </button>
           </div>
           

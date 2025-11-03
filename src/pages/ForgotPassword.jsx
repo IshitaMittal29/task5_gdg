@@ -1,13 +1,37 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'; // 1. Make sure useNavigate is imported
+import axios from 'axios';
 
 function ForgotPassword() {
-  const handleSubmit = (e) => {
+  const navigate = useNavigate(); // 2. Initialize navigate
+
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    console.log("Password reset for:", e.target.email.value);
-    alert("Check your email for an OTP! (Not really, this is just a demo)");
-    
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.post('/api/auth/forgot-password', {
+        email: email,
+      });
+
+      setLoading(false);
+      
+      // 3. On success, show an alert and navigate to the reset page
+      alert(response.data.message || "An OTP has been sent to your email!");
+      
+      // 4. Navigate to the reset-password page and pass the email
+      navigate('/reset-password', { state: { email: email } });
+
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+      setError(err.response?.data?.message || 'Failed to send OTP. Please try again.');
+    }
   };
 
   return (
@@ -36,15 +60,20 @@ function ForgotPassword() {
               required
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
+
+          {error && <p className="text-sm text-center text-red-600">{error}</p>}
 
           <div>
             <button
               type="submit"
-              className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              disabled={loading}
+              className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400"
             >
-              Send OTP
+              {loading ? 'Sending...' : 'Send OTP'}
             </button>
           </div>
         </form>

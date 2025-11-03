@@ -1,21 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function LoginPage() {
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleLogin = async (e) => {
     e.preventDefault(); 
-    const email = e.target.email.value;
+    setLoading(true);
+    setError(null);
 
-    console.log("Email value being checked:", email);
+    try {
+      const response = await axios.post('/api/auth/login', {
+        email: email,
+        password: password,
+      });
 
-    if (email.includes('creator')) {
-      alert("Creator login successful! Redirecting to Creator Dashboard...");
-      navigate('/creator-dashboard');
-    } else {
-      alert("Student login successful! Redirecting to Student Dashboard...");
-      navigate('/dashboard');
+      console.log("LOGIN RESPONSE RECEIVED:", response.data);
+
+      // 1. Get the 'accessToken' from the response (this is correct now)
+      const { accessToken } = response.data;
+
+      if (!accessToken) {
+        console.error("COULD NOT FIND 'accessToken' IN RESPONSE", response.data);
+        setError("Login successful, but response format is unknown.");
+        setLoading(false);
+        return;
+      }
+      
+      // 2. Save the correct token to local storage
+      localStorage.setItem('token', accessToken); 
+      setLoading(false);
+
+      // 3. WORKAROUND: Since the API is not sending the 'role',
+      //    we will check the email to decide where to redirect.
+      if (email.includes('creator')) {
+        navigate('/creator-dashboard');
+      } else {
+        navigate('/dashboard');
+      }
+
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+      setError(err.response?.data?.message || 'Invalid email or password.');
     }
   };
 
@@ -41,7 +74,9 @@ function LoginPage() {
               autoComplete="email"
               required
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              placeholder="student@example.com or creator@example.com"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -60,8 +95,12 @@ function LoginPage() {
               required
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          
+          {error && <p className="text-sm text-center text-red-600">{error}</p>}
 
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -88,9 +127,10 @@ function LoginPage() {
           <div>
             <button
               type="submit"
-              className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              disabled={loading}
+              className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400"
             >
-              Log in
+              {loading ? 'Logging in...' : 'Log in'}
             </button>
           </div>
         </form>

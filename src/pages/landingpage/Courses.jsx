@@ -6,7 +6,7 @@ function Courses() {
       <div className="container">
         <div className="courses-header">
           <h2 className="section-title">
-            Let browse, search, and filter courses
+            Lets browse, search, and filter courses
           </h2>
           <div className="features-cta">
             <a href="#" className="btn blue-gradient">

@@ -1,14 +1,67 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 function ResetPassword() {
   const navigate = useNavigate();
+  const location = useLocation(); 
+  
+  const email = location.state?.email;
 
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    otp: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Password has been reset!");
-    alert("Password reset successfully!");
-    navigate('/login');
+    setLoading(true);
+    setError(null);
+    setMessage(null);
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      setLoading(false);
+      return;
+    }
+
+    if (!email) {
+      setError("No email found. Please go back and try again.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // THIS IS THE CORRECTED LINE:
+      const response = await axios.post('/api/auth/reset-password', {
+        email: email, 
+        otp: formData.otp,
+        newPassword: formData.password, // Changed from 'password'
+      });
+
+      setLoading(false);
+      setMessage(response.data.message || "Password has been reset successfully!");
+      
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+      setError(err.response?.data?.message || 'Failed to reset password. Invalid OTP or email.');
+    }
   };
 
   return (
@@ -17,9 +70,16 @@ function ResetPassword() {
         <h2 className="text-3xl font-bold text-center text-gray-800">
           Set a new password
         </h2>
-        <p className="text-sm text-center text-gray-600">
-          Please enter the 6-digit OTP sent to your email and create a new password.
-        </p>
+        
+        {email ? (
+          <p className="text-sm text-center text-gray-600">
+            Enter the OTP sent to <strong>{email}</strong>.
+          </p>
+        ) : (
+           <p className="text-sm text-center text-gray-600">
+            Please enter your OTP and new password.
+          </p>
+        )}
         
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
@@ -37,49 +97,59 @@ function ResetPassword() {
               required
               className="w-full px-3 py-2 mt-1 tracking-widest text-center border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="••••••"
+              value={formData.otp}
+              onChange={handleChange}
             />
           </div>
 
           <div>
             <label 
-              htmlFor="new-password" 
+              htmlFor="password" 
               className="block text-sm font-medium text-gray-700"
             >
               New Password
             </label>
             <input
-              id="new-password"
-              name="new-password"
+              id="password"
+              name="password"
               type="password"
               required
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="••••••••"
+              value={formData.password}
+              onChange={handleChange}
             />
           </div>
 
           <div>
             <label 
-              htmlFor="confirm-password" 
+              htmlFor="confirmPassword" 
               className="block text-sm font-medium text-gray-700"
             >
               Confirm New Password
             </label>
             <input
-              id="confirm-password"
-              name="confirm-password"
+              id="confirmPassword"
+              name="confirmPassword"
               type="password"
               required
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="••••••••"
+              value={formData.confirmPassword}
+              onChange={handleChange}
             />
           </div>
+
+          {error && <p className="text-sm text-center text-red-600">{error}</p>}
+          {message && <p className="text-sm text-center text-green-600">{message}</p>}
 
           <div>
             <button
               type="submit"
-              className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              disabled={loading}
+              className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400"
             >
-              Reset Password
+              {loading ? 'Resetting...' : 'Reset Password'}
             </button>
           </div>
         </form>

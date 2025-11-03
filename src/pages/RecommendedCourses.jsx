@@ -1,53 +1,45 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
+// Placeholder data for recommended courses
 const recommendations = [
-  {
-    id: 1,
-    title: 'Advanced JavaScript & ESNext',
-    reason: 'Because you excelled in "Introduction on programming".',
-    img: 'https://placehold.co/600x400/f59e0b/ffffff?text=JavaScript',
-    tag: 'Programming',
-  },
-  {
-    id: 2,
-    title: 'Modern React with Hooks',
-    reason: 'A popular choice for Frontend Developers.',
-    img: 'https://placehold.co/600x400/3b82f6/ffffff?text=React',
-    tag: 'Framework',
-  },
-  {
-    id: 3,
-    title: 'AI Fundamentals & Machine Learning',
-    reason: 'Matches your interest in "Advanced Robotics".',
-    img: 'https://placehold.co/600x400/10b981/ffffff?text=AI/ML',
-    tag: 'AI',
-  },
+  { id: 1, title: 'AI Course 1', description: 'Understand Machine Learning Basics' },
+  { id: 2, title: 'AI Course 2', description: 'Understand Machine Learning Basics' },
+  { id: 3, title: 'AI Course 3', description: 'Understand Machine Learning Basics' },
+  { id: 4, title: 'AI Course 4', description: 'Understand Machine Learning Basics' },
+  { id: 5, title: 'AI Course 5', description: 'Understand Machine Learning Basics' },
 ];
 
-// Helper component for a single course card
-const CourseCard = ({ course }) => (
-  <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105">
-    <img src={course.img} alt={course.title} className="w-full h-48 object-cover" />
-    <div className="p-6">
-      <span className="text-sm font-semibold text-blue-600 bg-blue-100 px-3 py-1 rounded-full">
-        {course.tag}
-      </span>
-      <h3 className="text-xl font-bold text-gray-800 mt-3 mb-2">{course.title}</h3>
-      <p className="text-gray-600 text-sm">{course.reason}</p>
-      <button className="w-full mt-4 px-4 py-2 font-semibold text-white bg-blue-600 rounded-lg shadow-sm hover:bg-blue-700">
-        View Course
-      </button>
+// Helper component for a single list item
+const CourseListItem = ({ course }) => (
+  <Link 
+    to="#" // You can change this to /course/id later
+    className="flex items-center p-4 bg-white rounded-xl shadow-sm transition-all hover:shadow-md"
+  >
+    {/* Play Icon */}
+    <div className="mr-4">
+      <i className="fa-solid fa-play-circle text-3xl text-blue-500"></i>
     </div>
-  </div>
+    
+    {/* Course Info */}
+    <div className="flex-grow">
+      <h3 className="font-semibold text-gray-800">{course.title}</h3>
+      <p className="text-sm text-gray-500">{course.description}</p>
+    </div>
+    
+    {/* Chevron Icon */}
+    <div className="ml-4">
+      <i className="fa-solid fa-chevron-right text-gray-400"></i>
+    </div>
+  </Link>
 );
 
 function RecommendedCourses() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-100 font-inter p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-100 font-inter">
+      <div className="max-w-3xl mx-auto p-8">
         
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
@@ -63,10 +55,10 @@ function RecommendedCourses() {
           </button>
         </div>
 
-        {/* Course Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Course List */}
+        <div className="space-y-4">
           {recommendations.map((course) => (
-            <CourseCard key={course.id} course={course} />
+            <CourseListItem key={course.id} course={course} />
           ))}
         </div>
 
