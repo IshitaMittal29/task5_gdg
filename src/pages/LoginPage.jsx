@@ -23,7 +23,6 @@ function LoginPage() {
 
       console.log("LOGIN RESPONSE RECEIVED:", response.data);
 
-      // 1. Get the 'accessToken' from the response (this is correct now)
       const { accessToken } = response.data;
 
       if (!accessToken) {
@@ -33,12 +32,13 @@ function LoginPage() {
         return;
       }
       
-      // 2. Save the correct token to local storage
+      // --- THIS IS THE FIX ---
       localStorage.setItem('token', accessToken); 
+      localStorage.setItem('userEmail', email); // <-- WE ADD THIS LINE
+      // -----------------------
+      
       setLoading(false);
 
-      // 3. WORKAROUND: Since the API is not sending the 'role',
-      //    we will check the email to decide where to redirect.
       if (email.includes('creator')) {
         navigate('/creator-dashboard');
       } else {

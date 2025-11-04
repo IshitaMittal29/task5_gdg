@@ -1,30 +1,47 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; // 1. Import axios
 
 function PlagiarismDetector() {
   const navigate = useNavigate();
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null); // To store the result
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null); // 2. Add state for errors
 
-  const handleCheckPlagiarism = (e) => {
+  const handleCheckPlagiarism = async (e) => {
     e.preventDefault();
     setLoading(true);
     setResult(null);
+    setError(null); // 3. Reset error
 
-    // --- FAKE API CALL ---
-    // In a real app, you'd send this to your API
-    // await axios.post('/api/plagiarism-check', { content: text });
-    
-    console.log("Checking for plagiarism:", text);
-    
-    // Simulate a 2-second API call
-    setTimeout(() => {
+    try {
+      // 4. Send the text content to your new API endpoint
+      const response = await axios.post('/api/ml/plagiarism/detect', {
+        content: text, // Assuming the API expects an object with a 'content' key
+      });
+
+      // 5. Log the response so we can see what the API sends back
+      console.log("Plagiarism API Response:", response.data);
+      
       setLoading(false);
-      // Simulate a fake result
-      const fakeScore = Math.floor(Math.random() * 20) + 5; // 5-25%
-      setResult(`This content shows an estimated ${fakeScore}% plagiarism match.`);
-    }, 2000);
+
+      // 6. Update the result. We'll guess the API response format.
+      // If this doesn't work, check the console log!
+      const score = response.data.plagiarismPercentage; // <-- Check if this key is correct
+      if (score !== undefined) {
+        setResult(`This content has an estimated ${score.toFixed(2)}% plagiarism match.`);
+      } else {
+        // Fallback if the response format is different
+        setResult(response.data.message || 'Check complete. Unknown response format.');
+      }
+
+    } catch (err) {
+      // 7. Handle any errors
+      console.error(err);
+      setLoading(false);
+      setError(err.response?.data?.message || 'Failed to check plagiarism.');
+    }
   };
 
   return (
@@ -65,7 +82,7 @@ function PlagiarismDetector() {
             
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !text}
               className="w-full mt-6 px-6 py-3 text-lg font-medium text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400"
             >
               {loading ? 'Checking...' : 'Check Plagiarism'}
@@ -76,6 +93,13 @@ function PlagiarismDetector() {
           {result && !loading && (
             <div className="mt-6 p-4 text-center bg-blue-50 text-blue-800 rounded-lg">
               <p className="font-semibold">{result}</p>
+            </div>
+          )}
+          
+          {/* 8. Show error message */}
+          {error && !loading && (
+            <div className="mt-6 p-4 text-center bg-red-50 text-red-800 rounded-lg">
+              <p className="font-semibold">{error}</p>
             </div>
           )}
         </div>

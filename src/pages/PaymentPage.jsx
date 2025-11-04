@@ -1,19 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import apiClient from '../api/apiClient';
 
 function PaymentPage() {
   const navigate = useNavigate();
 
-  const handlePayment = (e) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Updated order details for Rupees
+  const orderDetails = {
+    amount: 8000, // Example amount in Rupees
+    currency: 'INR', // Changed from USD to INR
+    courseId: 'placeholder_course_123',
+  };
+
+  const handlePayment = async (e) => {
     e.preventDefault();
-    alert("Payment successful! (Not really, this is a demo)");
-    navigate('/dashboard'); 
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await apiClient.post('/payments/create-order', {
+        amount: orderDetails.amount,
+        currency: orderDetails.currency,
+      });
+      
+      console.log("Create Order API Response:", response.data);
+      
+      setLoading(false);
+      alert("Order created successfully!");
+      navigate('/dashboard');
+
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+      setError(err.response?.data?.message || 'Failed to create order. Please try again.');
+    }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 font-inter">
       <div className="w-full max-w-4xl p-8 mx-4 bg-white rounded-lg shadow-lg md:flex md:space-x-12">
         
+        {/* Left Side: Billing Details */}
         <div className="w-full md:w-1/2">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">
             Billing Details
@@ -65,7 +95,7 @@ function PaymentPage() {
               </div>
               <div className="w-1/2">
                 <label htmlFor="zip" className="block text-sm font-medium text-gray-700">
-                  ZIP / Postal Code
+                  PIN Code
                 </label>
                 <input
                   type="text"
@@ -87,16 +117,19 @@ function PaymentPage() {
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="text-gray-600">Pro Plan (Annual)</span>
-                <span className="font-medium text-gray-900">$120.00</span>
+                {/* Changed $ to ₹ */}
+                <span className="font-medium text-gray-900">₹10,000.00</span> 
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Discount (FIRSTYEAR)</span>
-                <span className="font-medium text-red-600">-$20.00</span>
+                {/* Changed $ to ₹ */}
+                <span className="font-medium text-red-600">-₹2,000.00</span> 
               </div>
               <div className="border-t my-2 pt-3"></div>
               <div className="flex justify-between">
                 <span className="text-lg font-bold text-gray-900">Total</span>
-                <span className="text-lg font-bold text-gray-900">$100.00</span>
+                {/* Changed $ to ₹ */}
+                <span className="text-lg font-bold text-gray-900">₹8,000.00</span> 
               </div>
             </div>
           </div>
@@ -145,11 +178,15 @@ function PaymentPage() {
               </div>
             </div>
             
+            {error && <p className="text-sm text-center text-red-600">{error}</p>}
+            
             <button
               type="submit"
-              className="flex justify-center w-full px-4 py-3 text-lg font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              disabled={loading}
+              className="flex justify-center w-full px-4 py-3 text-lg font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400"
             >
-              Pay $100.00
+              {/* Changed $ to ₹ */}
+              {loading ? 'Processing...' : 'Pay ₹8,000.00'} 
             </button>
             <p className="text-xs text-center text-gray-500">
               Payments are secure and encrypted.

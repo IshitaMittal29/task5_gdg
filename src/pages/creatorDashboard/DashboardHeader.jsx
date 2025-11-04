@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const DashboardHeader = () => {
+  const [userName, setUserName] = useState('User');
+  const [avatarLetter, setAvatarLetter] = useState('U');
+
+  useEffect(() => {
+    const email = localStorage.getItem('userEmail');
+    if (email) {
+      const namePart = email.split('@')[0];
+      setUserName(namePart);
+      setAvatarLetter(namePart.charAt(0).toUpperCase());
+    }
+  }, []);
+
   return (
     <header className="bg-white p-4 rounded-xl shadow-sm flex justify-between items-center mb-6">
       {/* Search Bar */}
@@ -20,9 +32,9 @@ const DashboardHeader = () => {
         <i className="fa-solid fa-message text-gray-600 text-xl cursor-pointer hover:text-blue-500"></i>
         
         <Link to="/profile" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-          <span className="font-semibold text-gray-700">Alex Johnson</span>
+          <span className="font-semibold text-gray-700 capitalize">{userName}</span>
           <img 
-            src="https://placehold.co/40x40/E2E8F0/333333?text=A" 
+            src={`https://placehold.co/40x40/E2E8F0/333333?text=${avatarLetter}`} 
             alt="User Avatar"
             className="w-10 h-10 rounded-full border-2 border-gray-200"
           />
