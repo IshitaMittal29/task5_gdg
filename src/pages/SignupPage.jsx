@@ -34,7 +34,6 @@ function SignupPage() {
     setError(null);
 
     try {
-      // UPDATED PATH: from /api/register to /api/auth/register
       const response = await axios.post('/api/auth/register', formData);
       
       console.log(response.data);
@@ -42,9 +41,22 @@ function SignupPage() {
       setStep(2); 
       
     } catch (err) {
-      console.error(err);
+      console.error("Registration Error:", err.response); // Log the full error
       setLoading(false);
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      
+      // --- THIS IS THE FIX ---
+      // Check the error status code
+      if (err.response && err.response.status === 409) {
+        // If it's a 409, we know the email is taken
+        setError("This email address is already registered.");
+      } else if (err.response && err.response.data && err.response.data.message) {
+        // Show any other specific message from the API
+        setError(err.response.data.message);
+      } else {
+        // Show the generic fallback
+        setError('Registration failed. Please try again.');
+      }
+      // -----------------------
     }
   };
 
@@ -54,7 +66,6 @@ function SignupPage() {
     setError(null);
 
     try {
-      // UPDATED PATH: from /api/verify-otp to /api/auth/verify-otp
       const response = await axios.post('/api/auth/verify-otp', {
         email: formData.email,
         otp: otp,
@@ -76,7 +87,6 @@ function SignupPage() {
     setLoading(true);
     setError(null);
     try {
-      // UPDATED PATH: from /api/resend-otp to /api/auth/resend-otp
       await axios.post('/api/auth/resend-otp', { email: formData.email });
       setLoading(false);
       alert('A new OTP has been sent to your email.');
@@ -200,7 +210,6 @@ function SignupPage() {
                 />
               </div>
               
-              {/* Error Message */}
               {error && <p className="text-sm text-center text-red-600">{error}</p>}
 
               <div>

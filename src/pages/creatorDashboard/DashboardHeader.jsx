@@ -32,6 +32,7 @@ const DashboardHeader = () => {
         <i className="fa-solid fa-message text-gray-600 text-xl cursor-pointer hover:text-blue-500"></i>
         
         <Link to="/profile" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+          {/* This name is now dynamic */}
           <span className="font-semibold text-gray-700 capitalize">{userName}</span>
           <img 
             src={`https://placehold.co/40x40/E2E8F0/333333?text=${avatarLetter}`} 
