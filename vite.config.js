@@ -6,13 +6,16 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   
+  base: '/task5_gdg/',
+  
   server: {
     proxy: {
       '/api': {
         // THIS IS THE NEW TARGET (from your Postman link)
         target: 'https://e-learning-platform-w2l1.onrender.com', 
         changeOrigin: true,
-        secure: false, // Important for HTTPS targets
+        secure: false, 
+        
       }
     }
   }
