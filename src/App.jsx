@@ -15,6 +15,7 @@ import RecommendedCourses from './pages/RecommendedCourses.jsx';
 import PlagiarismDetector from './pages/PlagiarismDetector.jsx';
 import PaymentSuccess from './pages/PaymentSuccess.jsx';
 import PaymentFailed from './pages/PaymentFailed.jsx';
+import CreateCoursePage from './pages/creatorDashboard/CreateCoursePage.jsx';
 
 function App() {
   return (
@@ -33,9 +34,9 @@ function App() {
       <Route path="/feedback" element={<FeedbackPage />} />
       <Route path="/recommendations" element={<RecommendedCourses />} />
       <Route path="/plagiarism" element={<PlagiarismDetector />} />
-
       <Route path="/payment-success" element={<PaymentSuccess />} />
       <Route path="/payment-failed" element={<PaymentFailed />} />
+      <Route path="/creator-dashboard/create" element={<CreateCoursePage />} />
     </Routes>
   );
 }

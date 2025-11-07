@@ -2,17 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import apiClient from '../api/apiClient';
 
-// Helper component for a single course list item
 const CourseListItem = ({ courseTitle }) => (
   <Link 
-    to="#" // You can change this to /course/id later
+    to="#" 
     className="flex items-center p-4 bg-white rounded-xl shadow-sm transition-all hover:shadow-md"
   >
     <div className="mr-4">
       <i className="fa-solid fa-play-circle text-3xl text-blue-500"></i>
     </div>
     <div className="flex-grow">
-      {/* Renders the course title string from the API */}
       <h3 className="font-semibold text-gray-800">{courseTitle}</h3>
       <p className="text-sm text-gray-500">View course details</p>
     </div>
@@ -22,7 +20,6 @@ const CourseListItem = ({ courseTitle }) => (
   </Link>
 );
 
-// Main page component
 function RecommendedCourses() {
   const navigate = useNavigate();
   
@@ -31,18 +28,15 @@ function RecommendedCourses() {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Fetch initial courses when the page loads
   useEffect(() => {
     const fetchRecommendations = async () => {
       setLoading(true);
       setError(null);
       try {
-        // Calls the /api/ml/courses endpoint
         const response = await apiClient.get('/ml/courses'); 
         
         console.log("Courses API Response:", response.data); 
         
-        // Sets the courses state to the array from the API
         setCourses(response.data.sample_courses); 
         setLoading(false);
       } catch (err) {
@@ -53,9 +47,8 @@ function RecommendedCourses() {
     };
 
     fetchRecommendations();
-  }, []); // Runs once on page load
+  }, []); 
 
-  // Handle the search form submission
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchTerm) return;
@@ -63,12 +56,10 @@ function RecommendedCourses() {
     setLoading(true);
     setError(null);
     try {
-      // Calls the /api/ml/search endpoint
       const response = await apiClient.get(`/ml/search?q=${searchTerm}`);
       
       console.log("Search API Response:", response.data);
       
-      // Assumes search also returns an array of strings
       setCourses(response.data); 
       setLoading(false);
     } catch (err)
@@ -129,7 +120,6 @@ function RecommendedCourses() {
           )}
 
           {!loading && !error && courses.map((courseTitle, index) => (
-            // Pass the courseTitle string as a prop
             <CourseListItem key={index} courseTitle={courseTitle} />
           ))}
         </div>

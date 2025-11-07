@@ -33,7 +33,6 @@ function ProfilePage() {
     }
   }, []);
 
-  // This useEffect fetches courses AFTER we know the role
   useEffect(() => {
     if (user.role === 'Student') {
       const fetchEnrolledCourses = async () => {
@@ -63,7 +62,7 @@ function ProfilePage() {
       console.error("Logout API failed, logging out locally.", err);
     } finally {
       localStorage.removeItem('token');
-      localStorage.removeItem('userEmail'); // <-- REMEMBER TO CLEAR THIS
+      localStorage.removeItem('userEmail'); 
       setLoading(false);
       alert("You have been logged out.");
       navigate('/');

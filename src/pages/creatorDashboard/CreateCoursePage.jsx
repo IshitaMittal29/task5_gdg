@@ -1,35 +1,67 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // The typo was 'in' instead of 'from'
-
-// import apiClient from '../../api/apiClient'; // We'll need this later
+import { useNavigate } from 'react-router-dom'; 
+import apiClient from '../../api/apiClient'; 
 
 function CreateCoursePage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    category: '',
+    price: '',
+  });
+  const [videoFile, setVideoFile] = useState(null);
+  const [thumbnailFile, setThumbnailFile] = useState(null);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleVideoChange = (e) => {
+    setVideoFile(e.target.files[0]);
+  };
+  const handleThumbnailChange = (e) => {
+    setThumbnailFile(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    
-    // TODO: Connect this to the POST /api/course/create-course endpoint
-    
-    const formData = {
-      title: e.target.title.value,
-      description: e.target.description.value,
-      category: e.target.category.value,
-      price: e.target.price.value,
-    };
-    
-    console.log("Form Data:", formData);
-    
-    // Simulate API call
-    setTimeout(() => {
+
+    if (!videoFile || !thumbnailFile) {
+      setError('Please upload both a video and a thumbnail.');
       setLoading(false);
-      alert("Course created successfully! (UI Demo)");
-      navigate('/creator-dashboard');
-    }, 1500);
+      return;
+    }
+
+    const data = new FormData();
+    data.append('title', formData.title);
+    data.append('description', formData.description); 
+    data.append('category', formData.category);
+    data.append('price', formData.price);
+    data.append('video', videoFile);
+    data.append('file', thumbnailFile); 
+
+    try {
+      const response = await apiClient.post('/course/create', data);
+
+      console.log("Course created:", response.data);
+      setLoading(false);
+      alert("Course created successfully!");
+      navigate('/creator-dashboard'); 
+
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+      setError(err.response?.data?.message || 'Failed to create course.');
+    }
   };
 
   return (
@@ -42,7 +74,7 @@ function CreateCoursePage() {
             Create a New Course
           </h1>
           <button 
-            onClick={() => navigate(-1)} // Go back
+            onClick={() => navigate(-1)} 
             className="flex items-center space-x-2 px-4 py-2 font-medium text-gray-700 bg-white rounded-lg shadow-sm hover:bg-gray-50"
           >
             <i className="fa-solid fa-arrow-left"></i>
@@ -60,12 +92,11 @@ function CreateCoursePage() {
                 Course Title
               </label>
               <input
-                type="text"
-                id="title"
-                name="title"
-                required
-                className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                type="text" id="title" name="title" required
+                className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm"
                 placeholder="e.g., Introduction to Python"
+                value={formData.title}
+                onChange={handleChange}
               />
             </div>
             
@@ -75,12 +106,11 @@ function CreateCoursePage() {
                 Course Description
               </label>
               <textarea
-                id="description"
-                name="description"
-                rows="4"
-                required
-                className="w-full p-3 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                id="description" name="description" rows="4" required
+                className="w-full p-3 mt-1 border border-gray-300 rounded-md shadow-sm"
                 placeholder="What will students learn in this course?"
+                value={formData.description}
+                onChange={handleChange}
               ></textarea>
             </div>
 
@@ -91,63 +121,67 @@ function CreateCoursePage() {
                   Category
                 </label>
                 <input
-                  type="text"
-                  id="category"
-                  name="category"
-                  required
-                  className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  type="text" id="category" name="category" required
+                  className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm"
                   placeholder="e.g., Programming"
+                  value={formData.category}
+                  onChange={handleChange}
                 />
               </div>
-              
               {/* Price */}
               <div>
                 <label htmlFor="price" className="block text-sm font-medium text-gray-700">
                   Price (in ₹)
                 </label>
                 <input
-                  type="number"
-                  id="price"
-                  name="price"
-                  required
-                  min="0"
-                  className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  type="number" id="price" name="price" required min="0"
+                  className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm"
                   placeholder="e.g., 499"
+                  value={formData.price}
+                  onChange={handleChange}
                 />
               </div>
             </div>
-
-            {/* Thumbnail Upload (UI only) */}
+            
+            {/* Thumbnail Upload */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Course Thumbnail
+                Course Thumbnail (Image)
               </label>
-              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                <div className="space-y-1 text-center">
-                  <i className="fa-solid fa-image text-4xl text-gray-400"></i>
-                  <div className="flex text-sm text-gray-600">
-                    <label
-                      htmlFor="file-upload"
-                      className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none"
-                    >
-                      <span>Upload a file</span>
-                      <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                </div>
-              </div>
+              <input 
+                type="file" 
+                name="thumbnail" 
+                accept="image/png, image/jpeg"
+                required
+                onChange={handleThumbnailChange}
+                className="w-full mt-1 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              />
+              {thumbnailFile && <span className="text-sm text-gray-600">{thumbnailFile.name}</span>}
+            </div>
+
+            {/* Video Upload */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Course Video
+              </label>
+              <input 
+                type="file" 
+                name="video" 
+                accept="video/mp4, video/quicktime"
+                required
+                onChange={handleVideoChange}
+                className="w-full mt-1 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              />
+              {videoFile && <span className="text-sm text-gray-600">{videoFile.name}</span>}
             </div>
 
             {error && <p className="text-sm text-center text-red-600">{error}</p>}
             
-            {/* Submit Button */}
             <div className="text-right">
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex justify-center px-6 py-3 text-lg font-medium text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400"
+                className="inline-flex justify-center px-6 py-3 text-lg font-medium text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 disabled:bg-gray-400"
               >
                 {loading ? 'Creating...' : 'Create Course'}
               </button>

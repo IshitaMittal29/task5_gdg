@@ -7,11 +7,10 @@ const Sidebar = () => {
 
   const navLinks = [
     { name: 'Dashboard', icon: 'fa-solid fa-house', path: '/dashboard' },
-    { name: 'Recommendations', icon: 'fa-solid fa-wand-magic-sparkles', path: '/recommendations' }, // NEW LINK
+    { name: 'Recommendations', icon: 'fa-solid fa-wand-magic-sparkles', path: '/recommendations' }, 
     { name: 'Lessons', icon: 'fa-solid fa-book', path: '#' },
     { name: 'Schedules', icon: 'fa-solid fa-calendar-days', path: '#' },
     { name: 'Materials', icon: 'fa-solid fa-folder-open', path: '#' },
-    { name: 'Forum', icon: 'fa-solid fa-comments', path: '#' },
     { name: 'Assessments', icon: 'fa-solid fa-chart-line', path: '#' },
   ];
 

@@ -16,28 +16,23 @@ function PlagiarismDetector() {
     setError(null); // 3. Reset error
 
     try {
-      // 4. Send the text content to your new API endpoint
       const response = await axios.post('/api/ml/plagiarism/detect', {
-        content: text, // Assuming the API expects an object with a 'content' key
+        content: text, 
       });
 
-      // 5. Log the response so we can see what the API sends back
       console.log("Plagiarism API Response:", response.data);
       
       setLoading(false);
 
-      // 6. Update the result. We'll guess the API response format.
-      // If this doesn't work, check the console log!
-      const score = response.data.plagiarismPercentage; // <-- Check if this key is correct
+     
+      const score = response.data.plagiarismPercentage;
       if (score !== undefined) {
         setResult(`This content has an estimated ${score.toFixed(2)}% plagiarism match.`);
       } else {
-        // Fallback if the response format is different
         setResult(response.data.message || 'Check complete. Unknown response format.');
       }
 
     } catch (err) {
-      // 7. Handle any errors
       console.error(err);
       setLoading(false);
       setError(err.response?.data?.message || 'Failed to check plagiarism.');

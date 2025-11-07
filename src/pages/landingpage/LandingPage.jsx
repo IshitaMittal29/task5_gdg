@@ -1,4 +1,3 @@
-/* src/pages/landingpage/LandingPage.jsx */
 import React from 'react';
 import './LandingPage.css'; 
 

@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import apiClient from '../api/apiClient';
+import apiClient from '../api/apiClient'; 
 
 function PaymentPage() {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const displayAmount = 49900; // This is ₹499.00
-  const displayCurrency = 'INR';
 
   const handlePayment = async (e) => {
     e.preventDefault();
@@ -23,8 +20,7 @@ function PaymentPage() {
 
     try {
       const orderResponse = await apiClient.post('/payments/create-order', {
-        amount: displayAmount,
-        currency: displayCurrency,
+        courseId: 2, 
       });
 
       console.log("Create Order API Response:", orderResponse.data);
@@ -33,16 +29,15 @@ function PaymentPage() {
       const orderAmount = orderResponse.data.amount;
 
       const options = {
-        key: "YOUR_RAZORPAY_KEY_ID", // <-- IMPORTANT: Get this from your teammate!
+        key: "rzp_test_RZoYCCZlPKea2x", 
         amount: orderAmount,
-        currency: displayCurrency,
+        currency: orderResponse.data.currency,
         name: "E-Learning Platform",
         description: "Course Payment",
         order_id: orderId,
         handler: function (response) {
           console.log("Razorpay Response:", response);
-          alert("Payment Successful! Order ID: " + response.razorpay_order_id);
-          navigate('/dashboard');
+          navigate('/payment-success', { state: { orderId: response.razorpay_order_id } });
         },
         prefill: {
           name: billingDetails.name,
@@ -58,8 +53,7 @@ function PaymentPage() {
 
       rzp.on('payment.failed', function (response) {
         console.error("Razorpay payment failed:", response.error);
-        setError(`Payment Failed: ${response.error.description}`);
-        setLoading(false);
+        navigate('/payment-failed', { state: { error: response.error.description } });
       });
 
     } catch (err) {
@@ -84,7 +78,7 @@ function PaymentPage() {
         <form className="w-full md:flex md:space-x-12" onSubmit={handlePayment}>
         
           {/* Left Side: Billing Details */}
-          <div className="w-full md:w-1f/2 space-y-4">
+          <div className="w-full md:w-1/2 space-y-4">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
               Billing Details
             </h2>
@@ -110,13 +104,10 @@ function PaymentPage() {
                 id="email"
                 name="email" 
                 required
-                // --- THIS IS THE FIX ---
-                // Changed 'defaultValue' to 'placeholder'
                 placeholder="you@example.com" 
                 className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-            {/* ... other billing fields ... */}
           </div>
 
           {/* Right Side: Payment Details & Order Summary */}

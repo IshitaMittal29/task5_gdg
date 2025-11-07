@@ -32,11 +32,9 @@ function LoginPage() {
         return;
       }
       
-      // --- THIS IS THE FIX ---
       localStorage.setItem('token', accessToken); 
-      localStorage.setItem('userEmail', email); // <-- WE ADD THIS LINE
-      // -----------------------
-      
+      localStorage.setItem('userEmail', email); 
+            
       setLoading(false);
 
       if (email.includes('creator')) {

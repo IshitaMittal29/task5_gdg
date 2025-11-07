@@ -41,22 +41,16 @@ function SignupPage() {
       setStep(2); 
       
     } catch (err) {
-      console.error("Registration Error:", err.response); // Log the full error
+      console.error("Registration Error:", err.response); 
       setLoading(false);
       
-      // --- THIS IS THE FIX ---
-      // Check the error status code
-      if (err.response && err.response.status === 409) {
-        // If it's a 409, we know the email is taken
+        if (err.response && err.response.status === 409) {
         setError("This email address is already registered.");
       } else if (err.response && err.response.data && err.response.data.message) {
-        // Show any other specific message from the API
         setError(err.response.data.message);
       } else {
-        // Show the generic fallback
         setError('Registration failed. Please try again.');
       }
-      // -----------------------
     }
   };
 

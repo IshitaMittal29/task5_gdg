@@ -43,11 +43,10 @@ function ResetPassword() {
     }
 
     try {
-      // THIS IS THE CORRECTED LINE:
       const response = await axios.post('/api/auth/reset-password', {
         email: email, 
         otp: formData.otp,
-        newPassword: formData.password, // Changed from 'password'
+        newPassword: formData.password, 
       });
 
       setLoading(false);

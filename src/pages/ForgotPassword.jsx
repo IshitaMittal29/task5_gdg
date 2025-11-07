@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // 1. Make sure useNavigate is imported
+import { Link, useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
 
 function ForgotPassword() {
-  const navigate = useNavigate(); // 2. Initialize navigate
+  const navigate = useNavigate(); 
 
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,10 +21,8 @@ function ForgotPassword() {
 
       setLoading(false);
       
-      // 3. On success, show an alert and navigate to the reset page
       alert(response.data.message || "An OTP has been sent to your email!");
       
-      // 4. Navigate to the reset-password page and pass the email
       navigate('/reset-password', { state: { email: email } });
 
     } catch (err) {
